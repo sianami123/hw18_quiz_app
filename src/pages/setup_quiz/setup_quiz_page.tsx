@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Context } from "../../context/context";
 interface Category {
   id: number;
   name: string;
@@ -35,6 +36,12 @@ export default function SetupQuizPage() {
       setCategories(response.data.trivia_categories);
     };
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const contextData = useContext(Context);
+    const { dispatch } = contextData;
+    dispatch({ type: "RESET_QUESTIONS" });
   }, []);
 
   return (

@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Context } from "../../context/context";
 
 export default function QuizPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
+  const contextData = useContext(Context);
+  const { questionsState, dispatch } = contextData;
 
   const count = queryParams.get("amount");
   const categoryId = queryParams.get("categoryId");
@@ -15,7 +18,6 @@ export default function QuizPage() {
     navigate("/setup-quiz");
   }
 
-  const [questions, setQuestions] = useState<any[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
   useEffect(() => {
@@ -24,8 +26,7 @@ export default function QuizPage() {
         const url = `https://opentdb.com/api.php?amount=${count}&category=${categoryId}&difficulty=${difficulty}&type=multiple`;
         console.log("url", url);
         const questionData = await axios.get(url);
-        setQuestions(questionData.data.results);
-        console.log(questionData.data.results);
+        dispatch({ type: "ADD_QUESTIONS", payload: questionData.data.results });
       } catch (error: any) {
         console.log(error);
       }
@@ -34,7 +35,7 @@ export default function QuizPage() {
     fetchQuestions();
   }, [count, categoryId, difficulty]);
 
-  if (questions.length === 0) {
+  if (questionsState.length === 0) {
     return (
       <div className="min-h-screen bg-[#8A4FFF] p-5">
         <div className="max-w-[800px] mx-auto">Loading...</div>
@@ -42,18 +43,29 @@ export default function QuizPage() {
     );
   }
 
-  const question = questions[currentQuestion];
+  const question = questionsState[currentQuestion];
   const answers = [...question.incorrect_answers, question.correct_answer].sort(
     () => Math.random() - 0.5
   );
 
   const handleAnswerClick = (selectedAnswer: string) => {
-    if (questions.length === currentQuestion + 1) {
+    const isCorrect = selectedAnswer === question.correct_answer;
+    dispatch({
+      type: "ADD_ANSWER",
+      payload: {
+        ...question,
+        selectedAnswer,
+        isCorrect,
+      },
+    });
+    if (questionsState.length === currentQuestion + 1) {
       navigate("/results");
-    } else if (questions.length === currentQuestion) {
+    } else {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
+
+  console.log(questionsState);
 
   return (
     <div className="min-h-screen bg-[#8A4FFF] p-5">
@@ -69,12 +81,30 @@ export default function QuizPage() {
             <button
               onClick={() => handleAnswerClick(answer)}
               key={index}
-              className="w-full p-4 bg-[#7FFFD4] text-black rounded-[10px] 
-                       text-left hover:scale-[1.02] transition-transform"
+              className={`w-full p-4 text-black rounded-[10px] 
+                       text-left hover:scale-[1.02] transition-transform ${
+                         question.selectedAnswer !== answer
+                           ? "bg-[#7FFFD4]"
+                           : "bg-[#FFD700]"
+                       }`}
             >
               {index + 1}. {answer}
             </button>
           ))}
+        </div>
+        <div className="flex justify-between items-center mt-10">
+          <button
+            onClick={() => setCurrentQuestion(currentQuestion - 1)}
+            className="bg-[#FFD700] text-black p-4 rounded-[10px]"
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => setCurrentQuestion(currentQuestion + 1)}
+            className="bg-[#FFD700] text-black p-4 rounded-[10px]"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>

@@ -5,26 +5,27 @@ interface Iquestion {
   incorrect_answers: string[];
   question: string;
   type: string;
-  selectedAnswer?: string;
-  isCorrect?: boolean | undefined;
+  selectedAnswer?: string | null;
+  isCorrect?: boolean | null;
 }
 
-export const initialState: Iquestion = {
-  category: "",
-  correct_answer: "",
-  difficulty: "",
-  incorrect_answers: [],
-  question: "",
-  type: "",
-  selectedAnswer: "",
-  isCorrect: undefined,
-};
+const initialState: Iquestion[] = [];
 
-export const reducer = (state: Iquestion[], action: any): Iquestion[] => {
+const reducer = (state: Iquestion[], action: any): Iquestion[] => {
   switch (action.type) {
     case "ADD_QUESTIONS":
-      return [...state, ...action.payload];
+      return action.payload;
+    case "ADD_ANSWER":
+      return state.map((question) =>
+        question.question === action.payload.question
+          ? action.payload
+          : question
+      );
+    case "RESET_QUESTIONS":
+      return initialState;
     default:
       return state;
   }
 };
+
+export { initialState, reducer };
