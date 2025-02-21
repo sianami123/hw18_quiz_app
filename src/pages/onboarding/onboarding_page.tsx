@@ -1,38 +1,42 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../../styles/animations.css";
+import Layout from "../layout/layout";
 
 export default function OnboardingPage() {
+  const [isLaunching, setIsLaunching] = useState(false);
   const navigate = useNavigate();
 
+  const handleStart = () => {
+    setIsLaunching(true);
+    setTimeout(() => {
+      navigate("/setup");
+    }, 1000);
+  };
+
   return (
-    <div className="min-h-screen bg-purple-600 flex flex-col items-center px-4">
-      {/* Quiz Title */}
-      <h1 className="text-6xl font-bold text-yellow-500 mt-16 tracking-wider">
-        QUIZ
-      </h1>
+    <div className="min-h-screen bg-purple-600 flex flex-col items-center justify-around p-8">
+      <Layout>
+        <h2 className="text-2xl text-white mb-16">Welcome To Quiz App</h2>
 
-      {/* Welcome Message */}
-      <h2 className="text-4xl font-bold text-white mt-32 text-center">
-        Welcome To Quiz App
-      </h2>
-
-      {/* Get Start Button and Rocket */}
-      <div className="mt-auto mb-32 flex flex-col items-center gap-8">
-        <button
-          onClick={() => navigate("/setup-quiz")}
-          className="text-2xl font-bold text-white cursor-pointer hover:scale-105 transition-transform"
+        <div
+          onClick={handleStart}
+          className="flex flex-col items-center cursor-pointer"
         >
-          GET START
-        </button>
-
-        {/* Rocket Icon */}
-        <div className="w-16 h-16">
-          <img
-            src="/rocket.png"
-            alt="Rocket"
-            className="w-full h-full object-contain"
-          />
+          <p className="text-white mb-4">GET START</p>
+          <button
+            className={`w-16 h-16 transition-transform ${
+              isLaunching ? "rocket-launch" : "hover:scale-110"
+            }`}
+          >
+            <img
+              src="https://ugokawaii.com/wp-content/uploads/2023/12/rocket.gif"
+              alt="Rocket"
+              className="w-full h-full object-contain"
+            />
+          </button>
         </div>
-      </div>
+      </Layout>
     </div>
   );
 }

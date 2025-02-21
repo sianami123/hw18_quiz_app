@@ -15,7 +15,7 @@ export default function QuizPage() {
   const difficulty = queryParams.get("difficulty");
 
   if (!count || !categoryId || !difficulty) {
-    navigate("/setup-quiz");
+    navigate("/setup");
   }
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -94,13 +94,21 @@ export default function QuizPage() {
         </div>
         <div className="flex justify-between items-center mt-10">
           <button
-            onClick={() => setCurrentQuestion(currentQuestion - 1)}
+            onClick={() => {
+              if (currentQuestion > 0) {
+                setCurrentQuestion(currentQuestion - 1);
+              }
+            }}
             className="bg-[#FFD700] text-black p-4 rounded-[10px]"
           >
             Previous
           </button>
           <button
-            onClick={() => setCurrentQuestion(currentQuestion + 1)}
+            onClick={() => {
+              if (currentQuestion < questionsState.length - 1) {
+                setCurrentQuestion(currentQuestion + 1);
+              }
+            }}
             className="bg-[#FFD700] text-black p-4 rounded-[10px]"
           >
             Next

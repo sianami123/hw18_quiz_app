@@ -19,6 +19,8 @@ export default function SetupQuizPage() {
   const [difficulty, setDifficulty] = useState<string>("Medium");
   const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
+  const contextData = useContext(Context);
+  const { dispatch } = contextData;
 
   const handleStartQuiz = () => {
     const queryParams = new URLSearchParams({
@@ -39,8 +41,6 @@ export default function SetupQuizPage() {
   }, []);
 
   useEffect(() => {
-    const contextData = useContext(Context);
-    const { dispatch } = contextData;
     dispatch({ type: "RESET_QUESTIONS" });
   }, []);
 

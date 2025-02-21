@@ -37,7 +37,7 @@ export default function Result() {
 
       <button
         className="bg-white px-8 py-3 rounded-lg text-xl font-bold cursor-pointer transition-transform hover:scale-105"
-        onClick={() => navigate("/setup-quiz")}
+        onClick={() => navigate("/setup")}
       >
         Again
       </button>
