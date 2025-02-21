@@ -25,7 +25,7 @@ export default function QuizPage() {
         console.log("url", url);
         const questionData = await axios.get(url);
         setQuestions(questionData.data.results);
-        console.log(questionData.data);
+        console.log(questionData.data.results);
       } catch (error: any) {
         console.log(error);
       }
@@ -47,11 +47,10 @@ export default function QuizPage() {
     () => Math.random() - 0.5
   );
 
-  const handleAnswerClick = (answer: string) => {
-    if (question.length === currentQuestion + 1) {
-      // navigate("/results");
-      return;
-    } else {
+  const handleAnswerClick = (selectedAnswer: string) => {
+    if (questions.length === currentQuestion + 1) {
+      navigate("/results");
+    } else if (questions.length === currentQuestion) {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
