@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer, useContext } from "react";
+import { useState, useEffect, useReducer, useContext, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../../context/context";
@@ -44,8 +44,12 @@ export default function QuizPage() {
   }
 
   const question = questionsState[currentQuestion];
-  const answers = [...question.incorrect_answers, question.correct_answer].sort(
-    () => Math.random() - 0.5
+  const answers = useMemo(
+    () =>
+      [...question.incorrect_answers, question.correct_answer].sort(
+        () => Math.random() - 0.5
+      ),
+    [question]
   );
 
   const handleAnswerClick = (selectedAnswer: string) => {
