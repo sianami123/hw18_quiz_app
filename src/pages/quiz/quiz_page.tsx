@@ -13,12 +13,13 @@ export default function QuizPage() {
   const count = queryParams.get("amount");
   const categoryId = queryParams.get("categoryId");
   const difficulty = queryParams.get("difficulty");
-
-  if (!count || !categoryId || !difficulty) {
-    navigate("/setup");
-  }
-
   const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  useEffect(() => {
+    if (!count || !categoryId || !difficulty) {
+      navigate("/setup");
+    }
+  }, [count, categoryId, difficulty, navigate]);
 
   useEffect(() => {
     async function fetchQuestions() {
@@ -32,8 +33,18 @@ export default function QuizPage() {
       }
     }
 
-    fetchQuestions();
-  }, [count, categoryId, difficulty]);
+    if (count && categoryId && difficulty) {
+      fetchQuestions();
+    }
+  }, [count, categoryId, difficulty, dispatch]);
+
+  const question = questionsState[currentQuestion] || {};
+  const answers = useMemo(() => {
+    if (!question.incorrect_answers) return [];
+    return [...question.incorrect_answers, question.correct_answer].sort(
+      () => Math.random() - 0.5
+    );
+  }, [question]);
 
   if (questionsState.length === 0) {
     return (
@@ -42,15 +53,6 @@ export default function QuizPage() {
       </div>
     );
   }
-
-  const question = questionsState[currentQuestion];
-  const answers = useMemo(
-    () =>
-      [...question.incorrect_answers, question.correct_answer].sort(
-        () => Math.random() - 0.5
-      ),
-    [question]
-  );
 
   const handleAnswerClick = (selectedAnswer: string) => {
     const isCorrect = selectedAnswer === question.correct_answer;

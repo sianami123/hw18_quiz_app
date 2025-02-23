@@ -27,6 +27,7 @@ export default function SetupQuizPage() {
       amount: numberOfQuestions,
       categoryId: selectedCategory.toString(),
       difficulty: difficulty.toLowerCase(),
+      type: "multiple",
     }).toString();
 
     navigate(`/quiz?${queryParams}`);
