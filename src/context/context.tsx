@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer } from "react";
 import { reducer, initialState } from "../reducer/reducer";
 
 type ContextType = {
