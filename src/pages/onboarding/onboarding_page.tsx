@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/animations.css";
+import "./animations.css";
 import Layout from "../layout/layout";
 
 export default function OnboardingPage() {
