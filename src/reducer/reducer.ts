@@ -6,15 +6,22 @@ interface Iquestion {
   question: string;
   type: string;
   selectedAnswer?: string | null;
-  isCorrect?: boolean | null;
 }
 
 const initialState: Iquestion[] = [];
+const decodeHTMLEntities = (text: string) => {
+  return text.replace(/&#(\d+);/g, (match, dec) => {
+    return String.fromCharCode(dec);
+  });
+};
 
 const reducer = (state: Iquestion[], action: any): Iquestion[] => {
   switch (action.type) {
     case "ADD_QUESTIONS":
-      return action.payload;
+      return action.payload.map((question: Iquestion) => ({
+        ...question,
+        question: decodeHTMLEntities(question.question),
+      }));
     case "ADD_ANSWER":
       return state.map((question) =>
         question.question === action.payload.question

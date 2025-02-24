@@ -15,6 +15,7 @@ const BASE_CATEGORY_URL = "https://opentdb.com/api_category.php";
 
 export default function SetupQuizPage() {
   const [numberOfQuestions, setNumberOfQuestions] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [difficulty, setDifficulty] = useState<string>("Medium");
   const [categories, setCategories] = useState<Category[]>([]);
@@ -23,6 +24,10 @@ export default function SetupQuizPage() {
   const { dispatch } = contextData;
 
   const handleStartQuiz = () => {
+    if (Number(numberOfQuestions) < 5 || Number(numberOfQuestions) > 50) {
+      setError("Please Enter A Number Between 5 And 50");
+      return;
+    }
     const queryParams = new URLSearchParams({
       amount: numberOfQuestions,
       categoryId: selectedCategory.toString(),
@@ -62,6 +67,7 @@ export default function SetupQuizPage() {
               className="w-full p-3 rounded-md bg-yellow-300"
               placeholder="Please Enter A Number Between 5 And 50"
             />
+            <span className="text-red-500">{error}</span>
           </div>
 
           <div>

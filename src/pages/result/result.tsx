@@ -8,7 +8,9 @@ export default function Result() {
   const { questionsState } = contextData;
 
   const score = Math.round(
-    (questionsState.filter((question: any) => question.isCorrect).length /
+    (questionsState.filter(
+      (question: any) => question.selectedAnswer === question.correct_answer
+    ).length /
       questionsState.length) *
       100
   );
@@ -33,6 +35,31 @@ export default function Result() {
 
       <div className="text-2xl font-bold text-white">
         YOUR SCORE = {score} %
+        <div className="text-2xl font-bold text-white max-h-[40vh] overflow-y-auto">
+          {questionsState.map((question: any) => (
+            <div
+              key={question.question}
+              className="flex items-center gap-2 text-lg h-4 overflow-hidden"
+            >
+              {question.question} -
+              <span
+                className={`${
+                  question.selectedAnswer !== question.correct_answer
+                    ? "text-red-500"
+                    : "text-green-500"
+                }`}
+              >
+                {question.selectedAnswer}
+              </span>{" "}
+              -{" "}
+              <span className="text-green-500">
+                {question.selectedAnswer !== question.correct_answer
+                  ? question.correct_answer
+                  : ""}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
       <button

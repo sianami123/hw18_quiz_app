@@ -55,13 +55,11 @@ export default function QuizPage() {
   }
 
   const handleAnswerClick = (selectedAnswer: string) => {
-    const isCorrect = selectedAnswer === question.correct_answer;
     dispatch({
       type: "ADD_ANSWER",
       payload: {
         ...question,
         selectedAnswer,
-        isCorrect,
       },
     });
     if (questionsState.length === currentQuestion + 1) {
