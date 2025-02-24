@@ -10,7 +10,7 @@ interface Iquestion {
 
 const initialState: Iquestion[] = [];
 const decodeHTMLEntities = (text: string) => {
-  return text.replace(/&#(\d+);/g, (match, dec) => {
+  return text.replace(/&#(\d+);/g, (_match, dec) => {
     return String.fromCharCode(dec);
   });
 };
