@@ -1,5 +1,5 @@
-https://ksc04ocgcwkwwkw0oos88cgs.callfornia.com
-https://github.com/sianami123/hw18_quiz_app
+
+![416755999-3ef8edc6-a26d-48b5-ae42-1f820f7badb5](https://github.com/user-attachments/assets/394ebffd-e56e-4546-b124-59579739c767)
 
 # React + TypeScript + Vite
 
